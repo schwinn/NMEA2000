@@ -635,6 +635,8 @@ public:
 
     // You can call this. It will be called anyway automatically by ParseMessages();
     bool Open();
+    bool Stop();
+    bool Continue();
 
     // Generate N2k message e.g. by using N2kMessages.h and simply send it to the bus.
     bool SendMsg(const tN2kMsg &N2kMsg, int DeviceIndex=0);

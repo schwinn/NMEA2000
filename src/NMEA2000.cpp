@@ -834,6 +834,31 @@ void tNMEA2000::InitCANFrameBuffers() {
 }
 
 //*****************************************************************************
+bool tNMEA2000::Stop() {
+    DeviceReady = false;
+    return DeviceReady;
+}
+
+//*****************************************************************************
+bool tNMEA2000::Continue() {
+
+
+    DeviceReady = (dbMode!=dm_None) || CANOpen();
+    if ( (ForwardStream!=0) && (ForwardType==tNMEA2000::fwdt_Text) ) {
+      if ( DeviceReady ) { ForwardStream->println(F("CAN device ready")); } else { ForwardStream->println(F("CAN device failed to open")); }
+    }
+
+    delay(200);
+    for (int i=0; i<DeviceCount; i++) {
+      if ( Devices[i].N2kSource==N2kNullCanBusAddress ) GetNextAddress(i,true); // On restart try address claiming from the beginning
+      StartAddressClaim(i);
+    }
+
+    return DeviceReady;
+
+}
+
+//*****************************************************************************
 bool tNMEA2000::Open() {
 
   if (!DeviceReady) {
