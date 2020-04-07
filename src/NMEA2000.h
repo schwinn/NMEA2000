@@ -342,6 +342,7 @@ protected:
     bool DeviceReady;
     bool AddressChanged;
     bool DeviceInformationChanged;
+    bool StopActive = false;
 
     // Device information
     tInternalDevice *Devices;
