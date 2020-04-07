@@ -867,7 +867,7 @@ bool tNMEA2000::Continue() {
 //*****************************************************************************
 bool tNMEA2000::Open() {
 
-  if (!DeviceReady) {
+  if (!DeviceReady && !StopActive) {
     InitCANFrameBuffers();
     InitDevices();
 
