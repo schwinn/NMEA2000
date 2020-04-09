@@ -847,13 +847,8 @@ bool tNMEA2000::Continue() {
 
     if (StopActive) {
       DeviceReady = true;
-      if ( (ForwardStream!=0) && (ForwardType==tNMEA2000::fwdt_Text) ) {
-        if ( DeviceReady ) { ForwardStream->println(F("CAN device ready")); } else { ForwardStream->println(F("CAN device failed to open")); }
-      }
 
-      delay(200);
       for (int i=0; i<DeviceCount; i++) {
-	Devices[i].NextHeartbeatSentTime=millis();
         if ( Devices[i].N2kSource==N2kNullCanBusAddress ) GetNextAddress(i,true); // On restart try address claiming from the beginning
         StartAddressClaim(i);
       }
@@ -861,14 +856,13 @@ bool tNMEA2000::Continue() {
     }
 
     return DeviceReady;
-
 }
 
 //*****************************************************************************
 bool tNMEA2000::Open() {
 
   if (!DeviceReady && !StopActive) {
-    InitCANFrameBuffers();
+    if ( N2kCANMsgBuf==0 ) InitCANFrameBuffers();
     InitDevices();
 
     if ( N2kCANMsgBuf==0 ) {
@@ -1010,7 +1004,7 @@ void tNMEA2000::SendHeartbeat(bool force) {
       if ( force ) Devices[iDev].NextHeartbeatSentTime=0;
       if ( Devices[iDev].HeartbeatInterval>0 && Devices[iDev].NextHeartbeatSentTime<millis() ) {
         tN2kMsg N2kMsg;
-        if ( Devices[iDev].NextHeartbeatSentTime==0 ) { Devices[iDev].NextHeartbeatSentTime=millis(); }
+        if ( Devices[iDev].NextHeartbeatSentTime==0 || Devices[iDev].NextHeartbeatSentTime+Devices[iDev].HeartbeatInterval<millis() ) { Devices[iDev].NextHeartbeatSentTime=millis(); }
         Devices[iDev].NextHeartbeatSentTime+=Devices[iDev].HeartbeatInterval;
         SetHeartbeat(N2kMsg,Devices[iDev].HeartbeatInterval,0);
         SendMsg(N2kMsg,iDev);
