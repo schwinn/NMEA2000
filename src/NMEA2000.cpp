@@ -835,33 +835,13 @@ void tNMEA2000::InitCANFrameBuffers() {
 
 //*****************************************************************************
 bool tNMEA2000::Stop() {
-    if (DeviceReady) {
-      DeviceReady = false;
-      StopActive = true;
-    }
-    return DeviceReady;
-}
-
-//*****************************************************************************
-bool tNMEA2000::Continue() {
-
-    if (StopActive) {
-      DeviceReady = true;
-
-      for (int i=0; i<DeviceCount; i++) {
-        if ( Devices[i].N2kSource==N2kNullCanBusAddress ) GetNextAddress(i,true); // On restart try address claiming from the beginning
-        StartAddressClaim(i);
-      }
-      StopActive = false;
-    }
-
-    return DeviceReady;
+    DeviceReady = false;
 }
 
 //*****************************************************************************
 bool tNMEA2000::Open() {
 
-  if (!DeviceReady && !StopActive) {
+  if (!DeviceReady) {
     if ( N2kCANMsgBuf==0 ) InitCANFrameBuffers();
     InitDevices();
 
