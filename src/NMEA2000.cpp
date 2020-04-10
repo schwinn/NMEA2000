@@ -834,7 +834,7 @@ void tNMEA2000::InitCANFrameBuffers() {
 }
 
 //*****************************************************************************
-bool tNMEA2000::Stop() {
+void tNMEA2000::Stop() {
     DeviceReady = false;
 }
 
