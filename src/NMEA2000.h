@@ -340,6 +340,8 @@ protected:
     tMsgHandler *MsgHandlers;
 
     bool DeviceReady;
+    bool InitDone = false;
+
     bool AddressChanged;
     bool DeviceInformationChanged;
 

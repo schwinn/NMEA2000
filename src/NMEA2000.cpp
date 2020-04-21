@@ -842,6 +842,12 @@ void tNMEA2000::Stop() {
 bool tNMEA2000::Open() {
 
   if (!DeviceReady) {
+
+    if ( InitDone ) {
+	return DeviceReady;
+    }
+
+
     if ( N2kCANMsgBuf==0 ) InitCANFrameBuffers();
     InitDevices();
 
@@ -874,6 +880,8 @@ bool tNMEA2000::Open() {
       StartAddressClaim(i);
     }
   }
+
+  InitDone = true;
 
   return DeviceReady;
 }
