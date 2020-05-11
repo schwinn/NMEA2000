@@ -340,7 +340,6 @@ protected:
     tMsgHandler *MsgHandlers;
 
     bool DeviceReady;
-    bool InitDone = false;
 
     bool AddressChanged;
     bool DeviceInformationChanged;
@@ -637,7 +636,8 @@ public:
 
     // You can call this. It will be called anyway automatically by ParseMessages();
     bool Open();
-    void Stop();
+    void Hold();
+    void Unhold();
 
     // Generate N2k message e.g. by using N2kMessages.h and simply send it to the bus.
     bool SendMsg(const tN2kMsg &N2kMsg, int DeviceIndex=0);
